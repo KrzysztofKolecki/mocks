@@ -23,5 +23,8 @@ public interface DatabaseManager {
 	public List<Client> getAllClients();
 	public List<Order> getAllOrders();
 	public List<Article> getAllArticles();
+	public void deleteAllClients();
+	public void deleteAllOrders();
+	public void deleteAllArticles();
 	
 }

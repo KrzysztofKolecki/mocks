@@ -40,6 +40,13 @@ public class Client {
 		this.email = email;
 	}
 	
+	public Client(String name, String surname, String email) {
+		super();
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+	}
+	
 	public Client() {
 		super();
 	}
