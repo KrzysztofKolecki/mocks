@@ -11,6 +11,7 @@ public interface DatabaseManager {
 	public int addClient(Client client);
 	public int addOrder(Order order);
 	public int addArticle(Article article);
+	public int addArticleToOrder(Order order, Article article);
 	public Client getClient(int id);
 	public Order getOrder(int id);
 	public Article getArticle(int id);
