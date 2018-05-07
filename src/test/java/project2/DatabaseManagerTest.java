@@ -16,11 +16,15 @@ import project2.domain.Client;
 import project2.domain.Order;
 import project2.service.DatabaseManager;
 import project2.service.DatabaseManagerImpl;
+import project2.storage.DatabaseStorage;
+import project2.storage.DatabaseStorageImpl;
 
 
 public class DatabaseManagerTest {
 	
-	DatabaseManagerImpl databaseManager = new DatabaseManagerImpl();
+	DatabaseStorage databaseStorage = new DatabaseStorageImpl();
+	
+	DatabaseManagerImpl databaseManager = new DatabaseManagerImpl(databaseStorage);
 	
 	String NAME1 = "Krzysztof";
 	String NAME2 = "Bartek";
@@ -37,10 +41,10 @@ public class DatabaseManagerTest {
 	
 	@AfterEach
     void clearDatabase() {
-		databaseManager.deleteAllOrderArticle();
-		databaseManager.deleteAllOrders();
-		databaseManager.deleteAllClients();
-		databaseManager.deleteAllArticles();	
+		databaseStorage.deleteAllOrderArticle();
+		databaseStorage.deleteAllOrders();
+		databaseStorage.deleteAllClients();
+		databaseStorage.deleteAllArticles();	
     }
 	
 	@Test
@@ -48,12 +52,12 @@ public class DatabaseManagerTest {
 			
 		Client client = new Client(NAME1, SURNAME1, EMAIL1);
 		
-		databaseManager.addClient(client);
+		databaseStorage.addClient(client);
 		
 		assertAll("client",
-				() -> assertEquals(NAME1, databaseManager.getAllClients().get(0).getName()),
-	            () -> assertEquals(SURNAME1, databaseManager.getAllClients().get(0).getSurname()),
-	            () -> assertEquals(EMAIL1, databaseManager.getAllClients().get(0).getEmail())
+				() -> assertEquals(NAME1, databaseStorage.getAllClients().get(0).getName()),
+	            () -> assertEquals(SURNAME1, databaseStorage.getAllClients().get(0).getSurname()),
+	            () -> assertEquals(EMAIL1, databaseStorage.getAllClients().get(0).getEmail())
 	    );
 	
 	}
@@ -62,13 +66,13 @@ public class DatabaseManagerTest {
 	public void checkAddingOrder(){
 		
 		Client client = new Client(NAME1, SURNAME1, EMAIL1);
-		databaseManager.addClient(client);
-		int clientId = databaseManager.getAllClients().get(0).getId();
-		client = databaseManager.getClient(clientId);
+		databaseStorage.addClient(client);
+		int clientId = databaseStorage.getAllClients().get(0).getId();
+		client = databaseStorage.getClient(clientId);
 		Order order = new Order();
 		order.setClient(client);
 		
-		assertEquals(1, databaseManager.addOrder(order));
+		assertEquals(1, databaseStorage.addOrder(order));
 	
 	}
 	
@@ -79,11 +83,11 @@ public class DatabaseManagerTest {
 		article.setName(ARTICLENAME1);
 		article.setValue(ARTICLEVALUE1);
 		
-		databaseManager.addArticle(article);
+		databaseStorage.addArticle(article);
 		
 		assertAll("article",
-				() -> assertEquals(ARTICLENAME1, databaseManager.getAllArticles().get(0).getName()),
-	            () -> assertEquals(ARTICLEVALUE1, databaseManager.getAllArticles().get(0).getValue())
+				() -> assertEquals(ARTICLENAME1, databaseStorage.getAllArticles().get(0).getName()),
+	            () -> assertEquals(ARTICLEVALUE1, databaseStorage.getAllArticles().get(0).getValue())
 	    );
 		
 	}
@@ -94,21 +98,21 @@ public class DatabaseManagerTest {
 		Article article = new Article();
 		article.setName(ARTICLENAME1);
 		article.setValue(ARTICLEVALUE1);
-		databaseManager.addArticle(article);
-		article = databaseManager.getAllArticles().get(0);
+		databaseStorage.addArticle(article);
+		article = databaseStorage.getAllArticles().get(0);
 		
 		Client client = new Client(NAME1, SURNAME1, EMAIL1);
-		databaseManager.addClient(client);
-		int clientId = databaseManager.getAllClients().get(0).getId();
-		client = databaseManager.getClient(clientId);
+		databaseStorage.addClient(client);
+		int clientId = databaseStorage.getAllClients().get(0).getId();
+		client = databaseStorage.getClient(clientId);
 		
 		Order order = new Order();
 		order.setClient(client);
-		databaseManager.addOrder(order);
-		order = databaseManager.getAllOrders().get(0);
+		databaseStorage.addOrder(order);
+		order = databaseStorage.getAllOrders().get(0);
 		
 		
-		assertEquals(1, databaseManager.addArticleToOrder(order, article));
+		assertEquals(1, databaseStorage.addArticleToOrder(order, article));
 	
 	}
 	
@@ -117,14 +121,14 @@ public class DatabaseManagerTest {
 
 		Client client = new Client(NAME2, SURNAME2, EMAIL2);
 		
-		databaseManager.addClient(client);
+		databaseStorage.addClient(client);
 		
-		int id = databaseManager.getAllClients().get(0).getId();
+		int id = databaseStorage.getAllClients().get(0).getId();
 						
 		assertAll("client",
-				() -> assertEquals(NAME2, databaseManager.getClient(id).getName()),
-	            () -> assertEquals(SURNAME2, databaseManager.getClient(id).getSurname()),
-	            () -> assertEquals(EMAIL2, databaseManager.getClient(id).getEmail())
+				() -> assertEquals(NAME2, databaseStorage.getClient(id).getName()),
+	            () -> assertEquals(SURNAME2, databaseStorage.getClient(id).getSurname()),
+	            () -> assertEquals(EMAIL2, databaseStorage.getClient(id).getEmail())
 	    );
 	
 	}
@@ -133,19 +137,19 @@ public class DatabaseManagerTest {
 	public void checkGettingOrder(){
 		
 		Client client = new Client(NAME1, SURNAME1, EMAIL1);
-		databaseManager.addClient(client);
-		int clientId = databaseManager.getAllClients().get(0).getId();
-		client = databaseManager.getClient(clientId);
+		databaseStorage.addClient(client);
+		int clientId = databaseStorage.getAllClients().get(0).getId();
+		client = databaseStorage.getClient(clientId);
 		Order order = new Order();
 		order.setClient(client);
 		
-		databaseManager.addOrder(order);
+		databaseStorage.addOrder(order);
 	
-		int id = databaseManager.getAllOrders().get(0).getId();
+		int id = databaseStorage.getAllOrders().get(0).getId();
 						
 		assertAll("client",
-				() -> assertEquals(id, databaseManager.getOrder(id).getId()),
-	            () -> assertEquals(clientId, databaseManager.getOrder(id).getClient().getId())
+				() -> assertEquals(id, databaseStorage.getOrder(id).getId()),
+	            () -> assertEquals(clientId, databaseStorage.getOrder(id).getClient().getId())
 	    );
 
 	}
@@ -157,13 +161,13 @@ public class DatabaseManagerTest {
 		article.setName(ARTICLENAME1);
 		article.setValue(ARTICLEVALUE1);
 		
-		databaseManager.addArticle(article);
+		databaseStorage.addArticle(article);
 		
-		int id = databaseManager.getAllArticles().get(0).getId();
+		int id = databaseStorage.getAllArticles().get(0).getId();
 		
 		assertAll("article",
-				() -> assertEquals(ARTICLENAME1, databaseManager.getArticle(id).getName()),
-	            () -> assertEquals(ARTICLEVALUE1, databaseManager.getArticle(id).getValue())
+				() -> assertEquals(ARTICLENAME1, databaseStorage.getArticle(id).getName()),
+	            () -> assertEquals(ARTICLEVALUE1, databaseStorage.getArticle(id).getValue())
 	    );
 	
 	}
@@ -174,12 +178,12 @@ public class DatabaseManagerTest {
 		Client client1 = new Client(NAME1, SURNAME1, EMAIL1);
 		Client client2 = new Client(NAME2, SURNAME2, EMAIL2);
 		
-		databaseManager.addClient(client1);
-		databaseManager.addClient(client2);
+		databaseStorage.addClient(client1);
+		databaseStorage.addClient(client2);
 		
-		databaseManager.deleteAllClients();
+		databaseStorage.deleteAllClients();
 				
-		assertEquals(0, databaseManager.getAllClients().size());
+		assertEquals(0, databaseStorage.getAllClients().size());
 	
 	}
 
