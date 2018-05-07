@@ -1,4 +1,4 @@
-package project2;
+package project2.tests;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;

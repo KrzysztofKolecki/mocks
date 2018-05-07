@@ -43,14 +43,23 @@ public class DatabaseManagerImpl implements DatabaseManager {
 	}
 
 
-	
-
 
 	@Override
 	public int addArticle(Article article) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		if(article == null)
+			throw new IllegalArgumentException("Null argument");
+		
+		if(articleExists(article))
+			throw new IllegalArgumentException("Client already exists");
+
+		databaseStorage.addArticle(article);
+		
+		return 1;
 	}
+
+
+	
 
 
 	@Override
@@ -135,6 +144,22 @@ public class DatabaseManagerImpl implements DatabaseManager {
 
 		
 		return exist;
+	}
+	
+	
+	private boolean articleExists(Article article) {
+		
+		List<Article> articles = databaseStorage.getAllArticles();
+		boolean exist = false;
+		
+		for(int i = 0; i < articles.size(); i++) {
+			if(articles.get(i).equals(article)) exist = true;
+		}
+
+		
+		return exist;
+		
+		
 	}
 
 
