@@ -56,8 +56,8 @@ public class DatabaseManagerTest {
 		
 		Client client = new Client(NAME1, SURNAME1, EMAIL1);
 		databaseManager.addClient(client);
-		client = databaseManager.getClient(0);
-		System.out.println("AAAAAAAAAAAAAAAAAAAAA: " + client.getId());
+		int clientId = databaseManager.getAllClients().get(0).getId();
+		client = databaseManager.getClient(clientId);
 		Order order = new Order();
 		order.setClient(client);
 		
@@ -71,6 +71,8 @@ public class DatabaseManagerTest {
 		Article article = new Article();
 		article.setName(ARTICLENAME1);
 		article.setValue(ARTICLEVALUE1);
+		
+		databaseManager.addArticle(article);
 		
 		assertAll("article",
 				() -> assertEquals(ARTICLENAME1, databaseManager.getAllArticles().get(0).getName()),
@@ -98,12 +100,33 @@ public class DatabaseManagerTest {
 		
 		databaseManager.addClient(client);
 		
-		System.out.println("CCCCCCCCCCCCCCCCCCCC: " + databaseManager.getClient(0).getName());
-				
+		int id = databaseManager.getAllClients().get(0).getId();
+						
 		assertAll("client",
-				() -> assertEquals(NAME2, databaseManager.getClient(0).getName()),
-	            () -> assertEquals(SURNAME2, databaseManager.getClient(0).getSurname()),
-	            () -> assertEquals(EMAIL2, databaseManager.getClient(0).getEmail())
+				() -> assertEquals(NAME2, databaseManager.getClient(id).getName()),
+	            () -> assertEquals(SURNAME2, databaseManager.getClient(id).getSurname()),
+	            () -> assertEquals(EMAIL2, databaseManager.getClient(id).getEmail())
+	    );
+	
+	}
+	
+	@Test
+	public void checkGettingOrder(){
+		
+		Client client = new Client(NAME1, SURNAME1, EMAIL1);
+		databaseManager.addClient(client);
+		int clientId = databaseManager.getAllClients().get(0).getId();
+		client = databaseManager.getClient(clientId);
+		Order order = new Order();
+		order.setClient(client);
+		
+		databaseManager.addOrder(order);
+	
+		int id = databaseManager.getAllOrders().get(0).getId();
+						
+		assertAll("client",
+				() -> assertEquals(id, databaseManager.getOrder(id).getId()),
+	            () -> assertEquals(clientId, databaseManager.getOrder(id).getClient().getId())
 	    );
 	
 	}

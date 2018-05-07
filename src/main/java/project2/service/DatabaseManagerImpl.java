@@ -101,7 +101,6 @@ public class DatabaseManagerImpl implements DatabaseManager {
 		int count = 0;
 		try {
 			PreparedStatement addOrderStmt = connection.prepareStatement("INSERT INTO Orders (client_id) VALUES (?)");
-			System.out.println("BBBBBBBBBBBBBBBB: " + order.getClient().getId());
 			addOrderStmt.setInt(1, order.getClient().getId());
 
 			count = addOrderStmt.executeUpdate();
@@ -170,7 +169,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
 		Order order = new Order();
 		
 		try {
-			PreparedStatement getOrderStmt = connection.prepareStatement("SELECT id, order_id FROM Orders WHERE id=?");
+			PreparedStatement getOrderStmt = connection.prepareStatement("SELECT id, client_id FROM Orders WHERE id=?");
 			getOrderStmt.setInt(1, id);
 			ResultSet rs = getOrderStmt.executeQuery();
 
