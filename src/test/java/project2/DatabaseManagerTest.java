@@ -3,6 +3,9 @@ package project2;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -27,10 +30,14 @@ public class DatabaseManagerTest {
 	String EMAIL2 = "brzoza@sigma.ug.edu.pl";
 	String ARTICLENAME1 = "Patagonia";
 	Double ARTICLEVALUE1 = 199.99;
+	String ARTICLENAME2 = "Nike Air";
+	Double ARTICLEVALUE2 = 99.99;
+	
 	
 	
 	@AfterEach
     void clearDatabase() {
+		databaseManager.deleteAllOrderArticle();
 		databaseManager.deleteAllOrders();
 		databaseManager.deleteAllClients();
 		databaseManager.deleteAllArticles();	
@@ -82,14 +89,26 @@ public class DatabaseManagerTest {
 	}
 	
 	@Test
-	@Disabled
 	public void checkAddingArticleToOrder(){
 		
 		Article article = new Article();
-		article.setName("Nike air");
-		article.setValue(99.99);
+		article.setName(ARTICLENAME1);
+		article.setValue(ARTICLEVALUE1);
+		databaseManager.addArticle(article);
+		article = databaseManager.getAllArticles().get(0);
 		
-		assertEquals(1, databaseManager.addArticle(article));
+		Client client = new Client(NAME1, SURNAME1, EMAIL1);
+		databaseManager.addClient(client);
+		int clientId = databaseManager.getAllClients().get(0).getId();
+		client = databaseManager.getClient(clientId);
+		
+		Order order = new Order();
+		order.setClient(client);
+		databaseManager.addOrder(order);
+		order = databaseManager.getAllOrders().get(0);
+		
+		
+		assertEquals(1, databaseManager.addArticleToOrder(order, article));
 	
 	}
 	
@@ -127,6 +146,24 @@ public class DatabaseManagerTest {
 		assertAll("client",
 				() -> assertEquals(id, databaseManager.getOrder(id).getId()),
 	            () -> assertEquals(clientId, databaseManager.getOrder(id).getClient().getId())
+	    );
+
+	}
+	
+	@Test
+	public void checkGettingArticle(){
+		
+		Article article = new Article();
+		article.setName(ARTICLENAME1);
+		article.setValue(ARTICLEVALUE1);
+		
+		databaseManager.addArticle(article);
+		
+		int id = databaseManager.getAllArticles().get(0).getId();
+		
+		assertAll("article",
+				() -> assertEquals(ARTICLENAME1, databaseManager.getArticle(id).getName()),
+	            () -> assertEquals(ARTICLEVALUE1, databaseManager.getArticle(id).getValue())
 	    );
 	
 	}

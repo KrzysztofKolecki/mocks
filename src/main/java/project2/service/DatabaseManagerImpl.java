@@ -127,18 +127,18 @@ public class DatabaseManagerImpl implements DatabaseManager {
 	}
 	
 	public int addArticleToOrder(Order order, Article article) {
-//		int count = 0;
-//		try {
-//			PreparedStatement addArticleToOrderStmt = connection.prepareStatement("INSERT INTO OrderArticle (order_id, article_id) VALUES (?, ?)");
-//			addArticleToOrderStmt.setInt(1, order.getId());
-//			addArticleToOrderStmt.setInt(2, article.getId());
-//
-//			count = addArticleToOrderStmt.executeUpdate();
-//
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-		return 0;
+		int count = 0;
+		try {
+			PreparedStatement addArticleToOrderStmt = connection.prepareStatement("INSERT INTO OrderArticle (order_id, article_id) VALUES (?, ?)");
+			addArticleToOrderStmt.setInt(1, order.getId());
+			addArticleToOrderStmt.setInt(2, article.getId());
+
+			count = addArticleToOrderStmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
 	}
 
 	public Client getClient(int id) {
@@ -388,6 +388,17 @@ public class DatabaseManagerImpl implements DatabaseManager {
 		try {
 			PreparedStatement deleteAllArticlesStmt = connection.prepareStatement("DELETE FROM Article");
 			deleteAllArticlesStmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void deleteAllOrderArticle() {
+		
+		try {
+			PreparedStatement deleteAllOrderArticleStmt = connection.prepareStatement("DELETE FROM OrderArticle");
+			deleteAllOrderArticleStmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
