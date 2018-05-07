@@ -1,1 +1,6 @@
 language: java
+
+script:
+- ./db/runHSQLDBServer.sh
+- ./db/runHSQLDBClient.s
+- mvn test

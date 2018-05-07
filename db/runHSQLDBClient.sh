@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -cp ./hsqldb.jar org.hsqldb.util.DatabaseManagerSwing --url jdbc:hsqldb:hsql://localhost/shopdb
+java -cp ./db/hsqldb.jar org.hsqldb.util.DatabaseManagerSwing --url jdbc:hsqldb:hsql://localhost/shopdb
