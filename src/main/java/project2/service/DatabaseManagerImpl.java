@@ -78,10 +78,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
 	@Override
 	public Client findClientByEmail(String email) {
 		
-		if(email == null)
-			throw new IllegalArgumentException("Null argument");
-		
-		
+
 		Optional<Client> client = databaseStorage.getAllClients().stream().filter(p -> p.getEmail() == email).findFirst();
 		
 		if(client.isPresent()) return client.get();
@@ -92,19 +89,14 @@ public class DatabaseManagerImpl implements DatabaseManager {
 	@Override
 	public List<Order> findOrderByClient(Client client) {
 		
-		if(client == null)
-			throw new IllegalArgumentException("Null argument");
-		
-		
 		List<Order> orders = databaseStorage.getAllOrders().stream().filter(p -> p.getClient().getId() == client.getId()).collect(Collectors.toList());
-		
-		if(orders.isEmpty()) throw new IllegalArgumentException("No orders found");
+		if(orders.size() == 0) throw new IllegalArgumentException("No orders found");
 		else return orders;
 		
 	}
 	
 
-	private boolean clientExists(Client client) {
+	public boolean clientExists(Client client) {
 		
 		List<Client> clients = databaseStorage.getAllClients();
 		boolean exist = false;
@@ -121,7 +113,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
 	}
 	
 	
-	private boolean articleExists(Article article) {
+	public boolean articleExists(Article article) {
 		
 		List<Article> articles = databaseStorage.getAllArticles();
 		boolean exist = false;
@@ -135,7 +127,12 @@ public class DatabaseManagerImpl implements DatabaseManager {
 
 		
 		return exist;
+	}
+	
+	
+	public List<Article> getOrderArticles(Order order) {
 		
+		return order.getArticles();
 		
 	}
 
