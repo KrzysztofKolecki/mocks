@@ -1,6 +1,7 @@
 # Testowanie aplikacji JAVA 2017-2018
 ## Projekt 2 (Maven, JUnit oraz atrapy) 
 
+## TRAVIS CI [![Build Status](https://travis-ci.com/KrzysztofKolecki/mocks.svg?branch=master)](https://travis-ci.com/KrzysztofKolecki/mocks)
 -----------------------
 ### REGUŁY GRY
 
