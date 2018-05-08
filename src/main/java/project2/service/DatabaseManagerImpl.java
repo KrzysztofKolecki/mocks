@@ -22,6 +22,8 @@ public class DatabaseManagerImpl implements DatabaseManager {
 		this.databaseStorage = databaseStorage;
 		
 	}
+	
+	public DatabaseManagerImpl() {}
 
 
 	@Override
@@ -134,6 +136,46 @@ public class DatabaseManagerImpl implements DatabaseManager {
 		
 		return order.getArticles();
 		
+	}
+	
+	public boolean orderExists(int id) {
+		
+		return databaseStorage.getAllOrders().stream().anyMatch(item -> item.getId() == id);
+		
+	}
+	
+	public int addMultipleArticlesToOrder(int orderId, List<Article> articles) {
+		
+		Order order;
+		
+		if(orderExists(orderId)) order = databaseStorage.getOrder(orderId);
+		else throw new IllegalArgumentException("Order with this id does not exist");
+		
+		order.setArticles(articles);
+		
+		databaseStorage.updateOrder(order);
+		
+		
+		return articles.size();
+	}
+	
+	public boolean articleExists(int id) {
+		
+		return databaseStorage.getAllArticles().stream().anyMatch(item -> item.getId() == id);
+		
+	}
+	
+	public int deleteArticleFromOrder(int orderId, int articleId) {
+		
+		if(!orderExists(orderId)) throw new IllegalArgumentException("Order with this id does not exist");
+		if(!articleExists(articleId)) throw new IllegalArgumentException("Article with this id does not exist");
+		
+		Order order = databaseStorage.getOrder(orderId);
+		
+		order.getArticles().stream().filter(item -> item.getId() != articleId).collect(Collectors.toList());
+		
+		return 1;
+
 	}
 
 
