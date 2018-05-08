@@ -81,38 +81,54 @@ public class DatabaseStorageMock implements DatabaseStorage {
 
 	@Override
 	public int updateClient(Client client) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		deleteClient(client.getId());
+		clients.add(client);
+		
+		return 1;
 	}
 
 	@Override
 	public int updateOrder(Order order) {
-		// TODO Auto-generated method stub
-		return 0;
+
+		deleteOrder(order.getId());
+		orders.add(order);
+		
+		return 1;
 	}
 
 	@Override
 	public int updateArticle(Article article) {
-		// TODO Auto-generated method stub
-		return 0;
+
+		deleteArticle(article.getId());
+		articles.add(article);
+		
+		return 1;
 	}
 
 	@Override
 	public int deleteClient(int id) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		clients.removeIf(item -> item.getId() == id);
+		
+		return 1;
+		
 	}
 
 	@Override
 	public int deleteOrder(int id) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		orders.removeIf(item -> item.getId() == id);
+		
+		return 1;	
 	}
 
 	@Override
 	public int deleteArticle(int id) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		articles.removeIf(item -> item.getId() == id);
+		
+		return 1;
 	}
 
 	@Override
@@ -156,7 +172,8 @@ public class DatabaseStorageMock implements DatabaseStorage {
 
 	@Override
 	public void deleteAllOrderArticle() {
-		// TODO Auto-generated method stub
+		
+		orders.forEach((item) -> item.setArticles(null));
 		
 	}
 

@@ -20,11 +20,10 @@ import project2.storage.DatabaseStorage;
 import project2.storage.DatabaseStorageImpl;
 
 
-public class DatabaseManagerTest {
+public class DatabaseStorageTest {
 	
 	DatabaseStorage databaseStorage = new DatabaseStorageImpl();
 	
-	DatabaseManagerImpl databaseManager = new DatabaseManagerImpl(databaseStorage);
 	
 	String NAME1 = "Krzysztof";
 	String NAME2 = "Bartek";
