@@ -26,10 +26,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
 
 	@Override
 	public int addClient(Client client) {
-		
-		if(client == null)
-			throw new IllegalArgumentException("Null argument");
-		
+
 		if(clientExists(client))
 			throw new IllegalArgumentException("Client with this email already exists");
 
@@ -43,9 +40,6 @@ public class DatabaseManagerImpl implements DatabaseManager {
 	@Override
 	public int addArticle(Article article) {
 		
-		if(article == null)
-			throw new IllegalArgumentException("Null argument");
-		
 		if(articleExists(article))
 			throw new IllegalArgumentException("Article with this name already exists");
 
@@ -58,10 +52,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
 	
 	@Override
 	public Article findArticleByName(String name) {
-		
-		if(name == null)
-			throw new IllegalArgumentException("Null argument");
-		
+	
 		
 		Optional<Article> article = databaseStorage.getAllArticles().stream().filter(p -> p.getName() == name).findFirst();
 		
@@ -119,7 +110,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
 		boolean exist = false;
 		
 		for(int i = 0; i < clients.size(); i++) {
-			if(clients.get(i).getEmail() == client.getEmail()) {
+			if(clients.get(i).getEmail().equals(client.getEmail())) {
 				exist = true;
 				break;
 			}

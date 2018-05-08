@@ -3,19 +3,12 @@ package project2.tests;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import project2.domain.Article;
 import project2.domain.Client;
 import project2.domain.Order;
-import project2.service.DatabaseManager;
-import project2.service.DatabaseManagerImpl;
 import project2.storage.DatabaseStorage;
 import project2.storage.DatabaseStorageImpl;
 
