@@ -9,6 +9,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import project2.domain.Article;
 import project2.domain.Client;
@@ -35,7 +38,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
 			throw new IllegalArgumentException("Null argument");
 		
 		if(clientExists(client))
-			throw new IllegalArgumentException("Client already exists");
+			throw new IllegalArgumentException("Client with this email already exists");
 
 		databaseStorage.addClient(client);
 		
@@ -51,7 +54,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
 			throw new IllegalArgumentException("Null argument");
 		
 		if(articleExists(article))
-			throw new IllegalArgumentException("Client already exists");
+			throw new IllegalArgumentException("Article with this name already exists");
 
 		databaseStorage.addArticle(article);
 		
@@ -60,77 +63,61 @@ public class DatabaseManagerImpl implements DatabaseManager {
 
 
 	
-
-
 	@Override
 	public Article findArticleByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Client findClientById(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Order findOrderById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(name == null)
+			throw new IllegalArgumentException("Null argument");
+		
+		
+		Optional<Article> article = databaseStorage.getAllArticles().stream().filter(p -> p.getName() == name).findFirst();
+		
+		if(article.isPresent()) return article.get();
+		else throw new IllegalArgumentException("Article with this name does not exist");
+	
 	}
 
 
 	@Override
 	public Article findArticleById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(id < 0)
+			throw new IllegalArgumentException("Id need to be greater or equal 0");
+		
+		Optional<Article> article = databaseStorage.getAllArticles().stream().filter(p -> p.getId() == id).findFirst();
+		
+		if(article.isPresent()) return article.get();
+		else throw new IllegalArgumentException("Article with this id does not exist");
+		
+	}
+
+	@Override
+	public Client findClientByEmail(String email) {
+		
+		if(email == null)
+			throw new IllegalArgumentException("Null argument");
+		
+		
+		Optional<Client> client = databaseStorage.getAllClients().stream().filter(p -> p.getEmail() == email).findFirst();
+		
+		if(client.isPresent()) return client.get();
+		else throw new IllegalArgumentException("Client with this email does not exist");
 	}
 
 
 	@Override
-	public int updateClient(Client client) {
-		// TODO Auto-generated method stub
-		return 0;
+	public List<Order> findOrderByClient(Client client) {
+		
+		if(client == null)
+			throw new IllegalArgumentException("Null argument");
+		
+		
+		List<Order> orders = databaseStorage.getAllOrders().stream().filter(p -> p.getClient().getId() == client.getId()).collect(Collectors.toList());
+		
+		if(orders.isEmpty()) throw new IllegalArgumentException("No orders found");
+		else return orders;
+		
 	}
-
-
-	@Override
-	public int updateOrder(Order order) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public int updateArticle(Article article) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public int deleteClient(int id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public int deleteOrder(int id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public int deleteArticle(int id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	
 	
 
 	private boolean clientExists(Client client) {
@@ -139,7 +126,10 @@ public class DatabaseManagerImpl implements DatabaseManager {
 		boolean exist = false;
 		
 		for(int i = 0; i < clients.size(); i++) {
-			if(clients.get(i).equals(client)) exist = true;
+			if(clients.get(i).getEmail() == client.getEmail()) {
+				exist = true;
+				break;
+			}
 		}
 
 		
@@ -153,7 +143,10 @@ public class DatabaseManagerImpl implements DatabaseManager {
 		boolean exist = false;
 		
 		for(int i = 0; i < articles.size(); i++) {
-			if(articles.get(i).equals(article)) exist = true;
+			if(articles.get(i).getName() == article.getName()) {
+				exist = true;
+				break;
+			}
 		}
 
 		
@@ -161,6 +154,9 @@ public class DatabaseManagerImpl implements DatabaseManager {
 		
 		
 	}
+
+
+
 
 
 
